@@ -49,35 +49,6 @@ Train the CNN model using a suitable loss function and optimizer. Evaluate the m
 ### Name:JAGANNIVASH U M
 ### Register Number: 212224240059
 ```python
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torchvision
-import torchvision.transforms as transforms
-from torch.utils.data import DataLoader
-import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, classification_report
-import seaborn as sns
-from torchsummary import summary
-
-transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize((0.5,), (0.5,))
-])
-
-train_dataset = torchvision.datasets.FashionMNIST(
-    root="./data", train=True, transform=transform, download=True
-)
-test_dataset = torchvision.datasets.FashionMNIST(
-    root="./data", train=False, transform=transform, download=True
-)
-
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
-
-print(f'Training samples: {len(train_dataset)}, Test samples: {len(test_dataset)}')
-
-
 class CNNClassifier(nn.Module):
     def __init__(self):
         super(CNNClassifier, self).__init__()
@@ -94,14 +65,16 @@ class CNNClassifier(nn.Module):
         x = torch.relu(self.fc1(x))
         x = self.fc2(x)
         return x
-
+```
+```py
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = CNNClassifier().to(device)
 
 print('Name: JAGANNIVASH U M')
 print('Register Number: 212224240059')
 summary(model, input_size=(1, 28, 28))
-
+```
+```py
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
@@ -125,68 +98,6 @@ def train_model(model, train_loader, num_epochs=3):
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {running_loss/len(train_loader):.4f}')
 
 train_model(model, train_loader)
-
-def test_model(model, test_loader):
-    model.eval()
-    correct = 0
-    total = 0
-    all_preds = []
-    all_labels = []
-
-    with torch.no_grad():
-        for images, labels in test_loader:
-            images, labels = images.to(device), labels.to(device)
-            outputs = model(images)
-            _, predicted = torch.max(outputs, 1)
-
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-
-            all_preds.extend(predicted.cpu().numpy())
-            all_labels.extend(labels.cpu().numpy())
-
-    accuracy = correct / total
-    print('Name: JAGANNIVASH U M')
-    print('Register Number: 212224240059')
-    print(f'Test Accuracy: {accuracy:.4f}')
-
-    cm = confusion_matrix(all_labels, all_preds)
-    plt.figure(figsize=(8,6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
-                xticklabels=test_dataset.classes,
-                yticklabels=test_dataset.classes)
-    plt.xlabel('Predicted')
-    plt.ylabel('Actual')
-    plt.title('Confusion Matrix')
-    plt.show()
-
-    print('Name: JAGANNIVASH U M')
-    print('Register Number: 212224240059')
-    print("Classification Report:")
-    print(classification_report(all_labels, all_preds, target_names=test_dataset.classes))
-
-test_model(model, test_loader)
-
-
-def predict_image(model, image_index, dataset):
-    model.eval()
-    image, label = dataset[image_index]
-    with torch.no_grad():
-        image_tensor = image.unsqueeze(0).to(device)
-        output = model(image_tensor)
-        _, predicted = torch.max(output, 1)
-
-    class_names = dataset.classes
-    print('Name: JAGANNIVASH U M')
-    print('Register Number: 212224240059')
-    plt.imshow(image.squeeze(), cmap="gray")
-    plt.title(f'Actual: {class_names[label]}\nPredicted: {class_names[predicted.item()]}')
-    plt.axis("off")
-    plt.show()
-    print(f'Actual: {class_names[label]}, Predicted: {class_names[predicted.item()]}')
-
-# Example: Predict image at index 80
-predict_image(model, image_index=80, dataset=test_dataset)
 ```
 
 ## OUTPUT
