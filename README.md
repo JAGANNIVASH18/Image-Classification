@@ -26,7 +26,7 @@ For implementation and testing purposes, the dataset was loaded using PyTorch ut
 
 ## Neural Network Model
 
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/450a1337-b45c-42cc-bb6a-df30da49bce3" />
+<img width="962" height="468" alt="image" src="https://github.com/user-attachments/assets/4fc6bd9a-604c-49c7-b3a6-328330a7112a" />
 
 
 ## DESIGN STEPS
